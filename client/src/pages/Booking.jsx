@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { MapPin, Armchair, CheckCircle, AlertTriangle } from 'lucide-react';
+import { MapPin, Armchair, CheckCircle, AlertTriangle, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
 import PaymentModal from '../components/PaymentModal';
 
 const Booking = () => {
     const { id } = useParams();
     const { user } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [selectedTheatre, setSelectedTheatre] = useState(null);
@@ -77,13 +79,17 @@ const Booking = () => {
     };
 
     const handleConfirmBooking = async () => {
+        const baseAmount = selectedSeats.length * selectedShow.price;
+        const discount = selectedSeats.length >= 6 ? baseAmount * 0.1 : 0;
+        const finalAmount = baseAmount - discount;
+
         const payload = {
             movieId: movie._id,
             movieTitle: movie.title,
             theatreName: selectedTheatre.name,
             showTime: selectedShow.time,
             seats: selectedSeats,
-            totalAmount: selectedSeats.length * selectedShow.price
+            totalAmount: finalAmount
         };
 
         try {
@@ -117,15 +123,15 @@ const Booking = () => {
         return (
             <div className="container animate-fade-in" style={{ textAlign: 'center', marginTop: '10rem' }}>
                 <CheckCircle size={100} color="var(--primary)" style={{ marginBottom: '2rem' }} />
-                <h1 style={{ fontSize: '3rem' }}>Booking Confirmed!</h1>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', marginTop: '1rem' }}>Enjoy your movie! Redirecting to your profile...</p>
+                <h1 style={{ fontSize: '3rem' }}>{t('Booking Confirmed!')}</h1>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', marginTop: '1rem' }}>{t('Enjoy your movie!')} Redirecting to your profile...</p>
             </div>
         );
     }
 
     return (
         <div className="container animate-fade-in" style={{ paddingTop: '2rem', paddingBottom: '5rem' }}>
-            <h1 style={{ marginBottom: '2rem' }}>Book Tickets: {movie.title}</h1>
+            <h1 style={{ marginBottom: '2rem' }}>Book Tickets: {t(movie.title)}</h1>
 
             {error && (
                 <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '1rem', borderRadius: '0.75rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -169,7 +175,7 @@ const Booking = () => {
                     <div className="glass" style={{ padding: '3rem', position: 'relative' }}>
                         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                             <div style={{ width: '80%', height: '8px', background: 'var(--primary)', margin: '0 auto', borderRadius: '100%', boxShadow: '0 10px 20px var(--primary)' }}></div>
-                            <p style={{ marginTop: '1rem', color: 'var(--text-muted)', fontSize: '0.8rem', letterSpacing: '4px' }}>SCREEN</p>
+                            <p style={{ marginTop: '1rem', color: 'var(--text-muted)', fontSize: '0.8rem', letterSpacing: '4px' }}>{t('SCREEN')}</p>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
@@ -199,38 +205,54 @@ const Booking = () => {
                         <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '3rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
                                 <div style={{ width: '16px', height: '16px', borderRadius: '3px', background: 'rgba(255,255,255,0.1)' }}></div>
-                                <span>Available</span>
+                                <span>{t('Available')}</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
                                 <div style={{ width: '16px', height: '16px', borderRadius: '3px', background: 'var(--primary)' }}></div>
-                                <span>Selected</span>
+                                <span>{t('Selected')}</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
                                 <div style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#1e293b' }}></div>
-                                <span>Booked</span>
+                                <span>{t('Booked')}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="glass" style={{ padding: '2rem', height: 'fit-content' }}>
-                        <h3 style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--glass-border)' }}>Booking Summary</h3>
+                        <h3 style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--glass-border)' }}>{t('Booking Summary')}</h3>
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Theatre</p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('Theatre')}</p>
                             <p style={{ fontWeight: 600 }}>{selectedTheatre.name}</p>
                         </div>
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Showtime</p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('Showtime')}</p>
                             <p style={{ fontWeight: 600 }}>{selectedShow.time}</p>
                         </div>
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Seats ({selectedSeats.length})</p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('Seats')} ({selectedSeats.length})</p>
                             <p style={{ fontWeight: 600 }}>{selectedSeats.join(', ') || 'None selected'}</p>
                         </div>
+
+                        {selectedSeats.length >= 6 && (
+                            <div style={{ marginBottom: '1.5rem', padding: '0.75rem', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '0.5rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Users size={16} />
+                                <span>{t('Group Discount Applied')}</span>
+                            </div>
+                        )}
                         
                         <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '1rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                <span>Total Amount</span>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary)' }}>${selectedSeats.length * selectedShow.price}</span>
+                                <span>{t('Total Amount')}</span>
+                                <div style={{ textAlign: 'right' }}>
+                                    {selectedSeats.length >= 6 && (
+                                        <p style={{ fontSize: '0.8rem', textDecoration: 'line-through', color: 'var(--text-muted)' }}>
+                                            ${selectedSeats.length * selectedShow.price}
+                                        </p>
+                                    )}
+                                    <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary)' }}>
+                                        ${(selectedSeats.length * selectedShow.price * (selectedSeats.length >= 6 ? 0.9 : 1)).toFixed(2)}
+                                    </p>
+                                </div>
                             </div>
                             <button 
                                 onClick={() => setShowPayment(true)}
@@ -245,14 +267,14 @@ const Booking = () => {
                                     cursor: selectedSeats.length > 0 ? 'pointer' : 'not-allowed'
                                 }}
                             >
-                                Proceed to Pay
+                                {t('Proceed to Pay')}
                             </button>
                         </div>
                         <button 
                             onClick={() => { setSelectedShow(null); setSelectedSeats([]); }}
                             style={{ width: '100%', marginTop: '1rem', background: 'transparent', color: 'var(--text-muted)', fontSize: '0.9rem' }}
                         >
-                            Change Show / Theatre
+                            {t('Change Show / Theatre')}
                         </button>
                     </div>
                 </div>

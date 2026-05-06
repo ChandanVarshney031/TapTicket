@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { subscribeToNotifications } from '../utils/notifications';
 
 const AuthContext = createContext();
 
@@ -10,7 +11,9 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         if (storedUser && token) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            subscribeToNotifications(parsedUser.id);
         }
         setLoading(false);
     }, []);
@@ -19,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', token);
+        subscribeToNotifications(userData.id);
     };
 
     const logout = () => {

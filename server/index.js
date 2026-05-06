@@ -48,10 +48,15 @@ app.set('io', io);
 const authRoutes = require('./routes/auth');
 const movieRoutes = require('./routes/movies');
 const bookingRoutes = require('./routes/bookings');
+const adminRoutes = require('./routes/admin');
+const setupCronJobs = require('./utils/cronJobs');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/admin', adminRoutes);
+
+setupCronJobs();
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

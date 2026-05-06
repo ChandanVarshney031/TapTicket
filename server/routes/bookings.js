@@ -3,6 +3,8 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const Booking = require('../models/Booking');
 const Movie = require('../models/Movie');
+const User = require('../models/User');
+const { sendEmail, sendPushNotification } = require('../services/notificationService');
 
 // Create a new booking with double-booking prevention
 router.post('/', auth, async (req, res) => {
@@ -67,6 +69,34 @@ router.post('/', auth, async (req, res) => {
         });
 
         res.json({ message: 'Booking successful', booking });
+
+        // 5. Send Notifications (Async)
+        try {
+            const user = await User.findById(userId);
+            if (user) {
+                // Email
+                const emailSubject = `Booking Confirmation - ${movieTitle}`;
+                const emailHtml = `
+                    <h1>Ticket Confirmed!</h1>
+                    <p>Hi ${user.name}, your tickets for <b>${movieTitle}</b> have been booked.</p>
+                    <p><b>Theatre:</b> ${theatreName}</p>
+                    <p><b>Show Time:</b> ${showTime}</p>
+                    <p><b>Seats:</b> ${seats.join(', ')}</p>
+                    <p><b>Total Amount:</b> ₹${totalAmount}</p>
+                    <p>Enjoy your movie!</p>
+                `;
+                sendEmail(user.email, emailSubject, `Your booking for ${movieTitle} is confirmed.`, emailHtml);
+
+                // Push
+                sendPushNotification(userId, {
+                    title: 'Booking Confirmed!',
+                    body: `Tickets for ${movieTitle} at ${showTime} are ready.`
+                });
+            }
+        } catch (notifErr) {
+            console.error("Notification trigger failed:", notifErr);
+        }
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error creating booking' });
