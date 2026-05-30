@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, User as UserIcon } from 'lucide-react';
+import { API_URL } from '../config';
 
 const Auth = ({ mode }) => {
     const isLogin = mode === 'login';
@@ -16,7 +17,7 @@ const Auth = ({ mode }) => {
         
         const endpoint = isLogin ? 'login' : 'signup';
         try {
-            const res = await fetch(`http://localhost:5000/api/auth/${endpoint}`, {
+            const res = await fetch(`${API_URL}/api/auth/${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

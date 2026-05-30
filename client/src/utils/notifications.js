@@ -1,3 +1,5 @@
+import { API_URL } from '../config';
+
 const VAPID_PUBLIC_KEY = 'BGbQ4efmWd6PPSSzf6eUK3jXonoPdc3vbKkCXEv4eup9NrU8VlaX7X3Z-PO_vHITJbNBbwB_Jly2KGHtXCXhQbA';
 
 function urlBase64ToUint8Array(base64String) {
@@ -27,7 +29,7 @@ export async function subscribeToNotifications(userId) {
                 applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
             });
 
-            await fetch('http://localhost:5000/api/auth/subscribe', {
+            await fetch(`${API_URL}/api/auth/subscribe`, {
                 method: 'POST',
                 body: JSON.stringify({ subscription, userId }),
                 headers: {

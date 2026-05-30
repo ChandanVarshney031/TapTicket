@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, Clock, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { API_URL } from '../config';
 
 const Home = () => {
     const { user } = useAuth();
@@ -13,11 +14,11 @@ const Home = () => {
 
     useEffect(() => {
         // Fetch all movies
-        const fetchMovies = fetch('http://localhost:5000/api/movies').then(res => res.json());
+        const fetchMovies = fetch(`${API_URL}/api/movies`).then(res => res.json());
         
         // Fetch recommendations if user is logged in
         const fetchRecs = user 
-            ? fetch('http://localhost:5000/api/movies/recommendations', {
+            ? fetch(`${API_URL}/api/movies/recommendations`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             }).then(res => res.json())
             : Promise.resolve([]);

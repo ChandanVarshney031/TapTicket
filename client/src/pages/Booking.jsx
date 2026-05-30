@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { MapPin, Armchair, CheckCircle, AlertTriangle, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
+import { API_URL, SOCKET_URL } from '../config';
 import PaymentModal from '../components/PaymentModal';
 
 const Booking = () => {
@@ -25,13 +26,13 @@ const Booking = () => {
         if (!user) navigate('/login');
         
         // Fetch Movie Data
-        fetch(`http://localhost:5000/api/movies/${id}`)
+        fetch(`${API_URL}/api/movies/${id}`)
             .then(res => res.json())
             .then(data => setMovie(data))
             .catch(err => console.error(err));
 
         // Setup WebSockets
-        socketRef.current = io('http://localhost:5000');
+        socketRef.current = io(SOCKET_URL);
         socketRef.current.emit('joinMovie', id);
 
         socketRef.current.on('seatsUpdated', ({ theatreName, showTime, bookedSeats }) => {
@@ -93,7 +94,7 @@ const Booking = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:5000/api/bookings', {
+            const res = await fetch(`${API_URL}/api/bookings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

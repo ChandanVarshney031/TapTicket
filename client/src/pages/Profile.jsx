@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { API_URL } from '../config';
 import { Calendar, MapPin, Ticket, Download, User as UserIcon } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -12,7 +13,7 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/bookings/my-bookings', {
+        fetch(`${API_URL}/api/bookings/my-bookings`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         })
             .then(res => res.json())

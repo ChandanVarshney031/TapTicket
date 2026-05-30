@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Play, Star, Clock, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { API_URL } from '../config';
 
 const MovieDetails = () => {
     const { id } = useParams();
@@ -10,7 +11,7 @@ const MovieDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/movies/${id}`)
+        fetch(`${API_URL}/api/movies/${id}`)
             .then(res => res.json())
             .then(data => {
                 setMovie(data);

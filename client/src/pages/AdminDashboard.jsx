@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { API_URL } from '../config';
 import { 
     LayoutDashboard, Film, Ticket, TrendingUp, Plus, Trash2, Edit, Save, X, 
     DollarSign, BarChart, ShoppingBag 
@@ -57,9 +58,9 @@ const AdminDashboard = () => {
             const headers = { 'Authorization': `Bearer ${token}` };
 
             const [statsRes, moviesRes, bookingsRes] = await Promise.all([
-                fetch('http://localhost:5000/api/admin/stats', { headers }),
-                fetch('http://localhost:5000/api/movies'),
-                fetch('http://localhost:5000/api/admin/bookings', { headers })
+                fetch(`${API_URL}/api/admin/stats`, { headers }),
+                fetch(`${API_URL}/api/movies`),
+                fetch(`${API_URL}/api/admin/bookings`, { headers })
             ]);
 
             const statsData = await statsRes.json();
@@ -80,7 +81,7 @@ const AdminDashboard = () => {
         if (!window.confirm('Are you sure you want to delete this movie?')) return;
         try {
             const token = localStorage.getItem('token');
-            await fetch(`http://localhost:5000/api/movies/${id}`, {
+            await fetch(`${API_URL}/api/movies/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -94,7 +95,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5000/api/movies', {
+            const res = await fetch(`${API_URL}/api/movies`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
