@@ -16,15 +16,33 @@ TapTicket is a modern, real-time, and localized movie ticket booking application
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshot Walkthrough
 
-| Homepage | Movie Details |
-| :---: | :---: |
-| ![Homepage](./screenshots/homepage.png) | ![Movie Details](./screenshots/movie_details.png) |
+### 1. Movie Discovery Homepage
+![Homepage](./screenshots/homepage.png)
+* **What you see**: The landing page of TapTicket displaying currently active and trending movies.
+* **Key Features**: Users can browse movies, see ratings and duration badges, view genre tags, and search/filter movies directly. The interface is localized, allowing users to dynamically switch display languages (e.g., English and Hindi).
 
-| Booking & Seating Layout | Admin Dashboard |
-| :---: | :---: |
-| ![Booking & Seating Layout](./screenshots/booking_seats.png) | ![Admin Dashboard](./screenshots/admin_dashboard.png) |
+---
+
+### 2. Movie Details & Showtimes
+![Movie Details](./screenshots/movie_details.png)
+* **What you see**: The detailed profile view for a selected movie (e.g., *Dune: Part Two*).
+* **Key Features**: Displays critical metadata including the plot summary, genres, cast list, and embedded official trailer. Below the details, users can browse available theatres, locations, and choose specific showtimes.
+
+---
+
+### 3. Real-Time Seating Layout & Booking
+![Booking & Seating Layout](./screenshots/booking_seats.png)
+* **What you see**: The interactive seating grid for booking a specific showtime.
+* **Key Features**: Seats are dynamically color-coded by tier (Gold, Premium, Regular) with custom pricing. Powered by WebSockets (`Socket.io`), seat selection states sync in real-time across all connected clients to prevent double-booking. Once seats are selected, the user can proceed to confirm bookings and download their PDF ticket.
+
+---
+
+### 4. Admin Analytics Dashboard
+![Admin Dashboard](./screenshots/admin_dashboard.png)
+* **What you see**: The management and analytics portal restricted to administrator accounts (users registered with `@admin.com` emails).
+* **Key Features**: Displays visual charts (using `Chart.js` and `react-chartjs-2`) tracking overall revenue, movie ticket sales distribution, active show counters, and seat occupation percentages. It also provides administrative tools for managing the movie listings and shows database.
 
 ---
 
