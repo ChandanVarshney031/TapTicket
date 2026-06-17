@@ -16,6 +16,18 @@ TapTicket is a modern, real-time, and localized movie ticket booking application
 
 ---
 
+## 📸 Screenshots
+
+| Homepage | Movie Details |
+| :---: | :---: |
+| ![Homepage](./screenshots/homepage.png) | ![Movie Details](./screenshots/movie_details.png) |
+
+| Booking & Seating Layout | Admin Dashboard |
+| :---: | :---: |
+| ![Booking & Seating Layout](./screenshots/booking_seats.png) | ![Admin Dashboard](./screenshots/admin_dashboard.png) |
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Frontend
